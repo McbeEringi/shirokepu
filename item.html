@@ -20,7 +20,7 @@
 							<p class="op">${x.member[y.data.member].aka.join('<br>')}</p>
 						</div>
 						<div class="grid cardd">
-							<h3 class="op">タグ</h3><h3>${y.data.type.map(z=>x.tag[z]).join(', ')}</h3>
+							<h3 class="op">タグ</h3><h3>${y.data.tag.map(z=>x.tag[z]).join(', ')}</h3>
 							<h3 class="op">説明</h3><h3>${y.data.desc}</h3>
 							<h3 class="op">日付</h3><h3>${y.data.date?n2d(y.data.date).join('/'):undefined}</h3>
 						</div>

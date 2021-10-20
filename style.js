@@ -8,7 +8,7 @@ document.body.insertAdjacentHTML('afterbegin',`
 	}
 	#log{white-space:pre-wrap;}
 	.flex{display:flex;}.fw{flex-wrap:wrap;}.jcsa{justify-content:space-between;}.aic{align-items:center;}
-	.tar{text-align:right;}.tac{text-align:center;}img{width:100%;}.op{opacity:.7;}
+	.tar{text-align:right;}.tac{text-align:center;}img{width:100%;border-radius:25%;}.op{opacity:.7;}
 	.grid{display:grid;grid-gap:4px;}.list{grid-template-columns:auto max(10vmin,64px) 1fr auto;}
 	.cardm{width:20vmin;min-width:96px;padding:4px;}
 	.cardd{grid-template-columns:auto 1fr;}

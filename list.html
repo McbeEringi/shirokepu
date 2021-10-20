@@ -22,7 +22,7 @@
 					<h2 class="tar">${y.data.no}</h2>
 					<p><img src="img/m${y.data.member}.png" alt="${x.member[y.data.member].name}"></p>
 					<a href="item.html?i=${y.i}"><h2 class="tac">${y.data.data}</h2></a>
-					<p class="tac">${x.type[y.data.type]}<br>${y.data.date?n2d(y.data.date).join('/'):''}</p>
+					<p class="tac">${y.data.tag.map(z=>x.tag[z]).join(', ')}<br>${y.data.date?n2d(y.data.date).join('/'):''}</p>
 				`;
 			});
 			wrap.textContent='';

@@ -19,13 +19,17 @@
 			<h3>すべて</h3>
 			<ul>
 				<li><a href="list.html">すべて (<span id="total_">読み込み中…</span>件)</a></li>
-				<li><a href="item.html" target="_blank">おまかせ</a></li>
+				<li><a href="item.html?r=1">おまかせ</a></li>
 			</ul>
 		</div>
 		<div><h3>月別</h3><ul id="month">読み込み中…</ul></div>
 		<div><h3>発言者別</h3><ul id="member">読み込み中…</ul></div>
 		<div><h3>タグ別</h3><ul id="tag">読み込み中…</ul></div>
 	</div>
+	<pre>list.html & item.html query parameter
+
+i	index numbers (i!=data.no)
+r	choose randomly from i (0==all,-n==all-n)</pre>
 	<script>
 		fetch('main.json').then(r=>r.json()).then(x=>{
 			latest.textContent=n2d(x.data[x.data.length-1].date).join('/');

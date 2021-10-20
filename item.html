@@ -22,7 +22,7 @@
 						<div class="grid cardd">
 							<h3 class="op">種類</h3><h3>${x.type[y.data.type]}</h3>
 							<h3 class="op">説明</h3><h3>${y.data.desc}</h3>
-							<h3 class="op">日付</h3><h3>${n2d(y.data.date).join('/')}</h3>
+							<h3 class="op">日付</h3><h3>${y.data.date?n2d(y.data.date).join('/'):undefined}</h3>
 						</div>
 					</div><hr>
 				`;

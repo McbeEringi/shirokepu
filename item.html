@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>しろけぷ発言まとめ - 発言詳細</title>
+</head>
+<body>
+	<script src="style.js"></script>
+	<div id="wrap">読み込み中…</div>
+	<script>
+		fetch('main.json').then(r=>r.json()).then(x=>{
+			x=(urlq.i||[Math.floor(Math.random()*x.data.length)]).map(y=>{
+				y={i:y,data:x.data[y]};
+				return`
+					<h1>${y.data.no} ${y.data.data}</h1>
+					<div class="flex aic">
+						<div class="tac cardm">
+							<img src="img/m${y.data.member}.png" alt="${x.member[y.data.member].name}">
+							<h2>${x.member[y.data.member].name}</h2>
+							<p class="op">${x.member[y.data.member].aka.join('<br>')}</p>
+						</div>
+						<div class="grid cardd">
+							<h3 class="op">種類</h3><h3>${x.type[y.data.type]}</h3>
+							<h3 class="op">説明</h3><h3>${y.data.desc}</h3>
+							<h3 class="op">日付</h3><h3>${n2d(y.data.date).join('/')}</h3>
+						</div>
+					</div><hr>
+				`;
+			});
+			wrap.textContent='';wrap.insertAdjacentHTML('beforeend','<hr>');
+			wrap.insertAdjacentHTML('beforeend',x.join(''));
+		}).catch(llog);
+	</script>
+</body>
+</html>

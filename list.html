@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>しろけぷ発言まとめ - 一覧</title>
+</head>
+<body>
+	<script src="style.js"></script>
+	<div class="flex fw jcsa">
+		<h1>しろけぷ発言まとめ</h1>
+		<p><span id="count"></span>件表示中</p>
+	</div>
+	<hr>
+	<div id="wrap" class="grid list aic">読み込み中…</div>
+	<script>
+		fetch('main.json').then(r=>r.json()).then(x=>{
+			urlq.i=(urlq.i||[...new Array(x.data.length).keys()]);
+			count.textContent=urlq.i.length;
+			x=urlq.i.map(y=>{
+				y={i:y,data:x.data[y]};
+				return`
+					<h2 class="tar">${y.data.no}</h2>
+					<p><img src="img/m${y.data.member}.png" alt="${x.member[y.data.member].name}"></p>
+					<a href="item.html?i=${y.i}"><h2 class="tac">${y.data.data}</h2></a>
+					<p class="tac">${x.type[y.data.type]}<br>${y.data.date?n2d(y.data.date).join('/'):''}</p>
+				`;
+			});
+			wrap.textContent='';
+			wrap.insertAdjacentHTML('beforeend',x.join(''));
+		}).catch(llog);
+	</script>
+</body>
+</html>

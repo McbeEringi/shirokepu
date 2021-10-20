@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>しろけぷ発言まとめ - ホーム</title>
+</head>
+<body>
+	<script src="style.js"></script>
+	<div class="flex fw jcsa">
+		<h1>しろけぷ発言まとめ</h1>
+		<table>
+			<tr><td class="tar op">最終追加日: </td><td id="latest">読み込み中…</td></tr>
+			<tr><td class="tar op">発言総数: </td><td id="total">読み込み中…</td></tr>
+		</table>
+	</div>
+	<hr>
+	<div class="flex fw">
+		<div>
+			<a href="item.html" target="_blank">おまかせ</a><br>
+			<a href="list.html">すべて (<span id="total_">読み込み中…</span>件)</a>
+		</div>
+		<div><h3>月別</h3><ul id="month">読み込み中…</ul></div>
+		<div><h3>発言者別</h3><ul id="member">読み込み中…</ul></div>
+		<div><h3>種類別</h3><ul id="type">読み込み中…</ul></div>
+	</div>
+	<script>
+		fetch('main.json').then(r=>r.json()).then(x=>{
+			latest.textContent=n2d(x.data[x.data.length-1].date).join('/');
+			total_.textContent=total.textContent=x.data.length;
+			x.tmp=x.data.reduce((a,y,i)=>{
+					a.member[y.member].push(i);
+					a.type[y.type].push(i);
+					if(y.date){
+						y=String(y.date).substr(0,4);
+						if(a.month[y])a.month[y].push(i);else a.month[y]=[i];
+					}
+					return a;
+				},{month:{},member:new Array(x.member.length).fill().map(()=>[]),type:new Array(x.type.length).fill().map(()=>[])});
+			month.textContent='';
+			month.insertAdjacentHTML('beforeend',
+				Object.entries(x.tmp.month).map(y=>`<li><a href="list.html?i=${y[1].join('+')}">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
+			);
+			member.textContent='';
+			member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="list.html?i=${x.tmp.member[i].join('+')}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
+			type.textContent='';
+			type.insertAdjacentHTML('beforeend',x.type.map((y,i)=>`<li><a href="list.html?i=${x.tmp.type[i].join('+')}">${y} (${x.tmp.type[i].length}件)</a></li>`).join(''));
+		}).catch(llog);
+	</script>
+</body>
+</html>

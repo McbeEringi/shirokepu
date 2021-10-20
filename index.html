@@ -21,7 +21,7 @@
 		</div>
 		<div><h3>月別</h3><ul id="month">読み込み中…</ul></div>
 		<div><h3>発言者別</h3><ul id="member">読み込み中…</ul></div>
-		<div><h3>種類別</h3><ul id="type">読み込み中…</ul></div>
+		<div><h3>タグ別</h3><ul id="tag">読み込み中…</ul></div>
 	</div>
 	<script>
 		fetch('main.json').then(r=>r.json()).then(x=>{
@@ -29,21 +29,21 @@
 			total_.textContent=total.textContent=x.data.length;
 			x.tmp=x.data.reduce((a,y,i)=>{
 					a.member[y.member].push(i);
-					a.type[y.type].push(i);
+					y.tag.forEach(z=>a.tag[z].push(i));
 					if(y.date){
 						y=String(y.date).substr(0,4);
 						if(a.month[y])a.month[y].push(i);else a.month[y]=[i];
 					}
 					return a;
-				},{month:{},member:new Array(x.member.length).fill().map(()=>[]),type:new Array(x.type.length).fill().map(()=>[])});
+				},{month:{},member:new Array(x.member.length).fill().map(()=>[]),tag:new Array(x.tag.length).fill().map(()=>[])});
 			month.textContent='';
 			month.insertAdjacentHTML('beforeend',
 				Object.entries(x.tmp.month).map(y=>`<li><a href="list.html?i=${y[1].join('+')}">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
 			);
 			member.textContent='';
 			member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="list.html?i=${x.tmp.member[i].join('+')}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
-			type.textContent='';
-			type.insertAdjacentHTML('beforeend',x.type.map((y,i)=>`<li><a href="list.html?i=${x.tmp.type[i].join('+')}">${y} (${x.tmp.type[i].length}件)</a></li>`).join(''));
+			tag.textContent='';
+			tag.insertAdjacentHTML('beforeend',x.tag.map((y,i)=>`<li><a href="list.html?i=${x.tmp.tag[i].join('+')}">${y} (${x.tmp.tag[i].length}件)</a></li>`).join(''));
 		}).catch(llog);
 	</script>
 </body>

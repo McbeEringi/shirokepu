@@ -6,7 +6,7 @@ document.body.insertAdjacentHTML('afterbegin',`
 		a:link{color:#aef;}a:link:hover{color:#8af;}a:link:active{color:#48f;}
 		a:visited{color:#caf;}a:visited:hover{color:#a8f;}a:visited:active{color:#84f;}
 	}
-	@media print{a{color:inherit;}}
+	@media print{a{color:inherit;text-decoration:none;}}
 	#log{white-space:pre-wrap;}
 	.flex{display:flex;}.fw{flex-wrap:wrap;}.jcsa{justify-content:space-between;}.aic{align-items:center;}
 	.tar{text-align:right;}.tac{text-align:center;}img{width:100%;border-radius:25%;}.op{opacity:.7;}

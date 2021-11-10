@@ -19,4 +19,5 @@ document.body.insertAdjacentHTML('afterbegin',`
 const llog=(...x)=>log.textContent+=`${x.join(', ')}\n`,
 urlq=Object.fromEntries(location.search.substr(1).split('&').map(x=>x.split('=',2).map(y=>y.split('+')))),
 n2d=x=>{if(!x)return;x=`20${x}`;return[x.substr(0,4),x.substr(4,2),x.substr(6,2)];};
+document.dispatchEvent(new Event('styexe'));
 console.log(urlq);

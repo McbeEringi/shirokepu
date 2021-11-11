@@ -2,65 +2,70 @@
 <html lang="en" dir="ltr">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>しろけぷ発言まとめ</title>
 </head>
 <body>
 	<script src="style.js" async></script>
-	<div id="wrap">読み込み中…</div>
+	<style>
+		#wrap{display:inline-block;position:relative;left:50%;transform:translateX(-50%);max-width:100%;min-width:50%;}
+		.bia{break-inside:avoid;}
+		.ctof,.ctof>*{overflow:hidden;}.ctof>*{white-space:nowrap;width:100%;text-overflow:ellipsis;}
+		.grow{flex-grow:1;display:block;width:100%;}
+		.spic,.lpic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
+		.lpic{width:9em;height:9em;}
+		.wsnw{white-space:nowrap;}.table{display:grid;grid-gap:4px;grid-template-columns:repeat(var(--clm),auto);}
+	</style>
+	<div><div id="wrap"></div></div>
 	<script>
-		const main=()=>{
+		const init=()=>{
 			fetch('main.json').then(r=>r.json()).then(x=>{
 				x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
 				if(!urlq.i)urlq.i=[...Object.keys(x.data)];
-				if(urlq.r)urlq.i=urlq.i.map(y=>[y,Math.random()]).sort((a,b)=>Math.sign(a[1]-b[1])).map(y=>y[0]).slice(0,+urlq.r[0]||urlq.i.length);
-				urlq.m=urlq.m?({list:1,item:2})[urlq.m[0]]||0:0;
 				x=[
-					()=>`
-						<button onclick="location.search+=(location.search?'&':'')+'m=list'">一覧表示</button>
-						<button onclick="location.search+=(location.search?'&':'')+'m=item'">詳細表示</button>
-					`,
 					()=>{
-						document.title+=' - 一覧';
+						document.title='しろけぷ発言まとめ - 一覧';
 						return`<div class="flex fw jcsa">
-							<h1>しろけぷ発言まとめ</h1>
-							<table>
-								<tr><td class="tar op">表示件数: </td><td>${urlq.i.length}</td></tr>
-							</table>
-						</div><hr><div class="grid list aic">`+
-						urlq.i.map(y=>{
-							y=x.data[y];
-							return`
-								<h2 class="tar">${y.no}</h2>
-								<p><img src="img/m${y.member}.png" alt="${x.member[y.member].name}"></p>
-								<a href="?m=item&i=${y.no}"><h2 class="tac">${y.data}</h2></a>
-								<p class="tac">${y.tag.map(z=>x.tag[z]).join(', ')}<br>${n2d(y.date).join('/')}</p>
-							`;
-						}).join('')+`</div>`;
+								<h1>しろけぷ発言まとめ</h1>
+								<table>
+									<tr><td class="tar op">表示件数: </td><td>${urlq.i.length}</td></tr>
+								</table>
+							</div><hr>`+urlq.i.map(y=>{
+								y=x.data[y];if(!y)return;
+								return`<div class="flex bia">
+										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="spic">
+										<a href="?m=1&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
+										<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+									</div>`;
+							}).join('');
 					},
 					()=>{
-						document.title+=' - 発言詳細';
-						return`<hr>`+urlq.i.map(y=>{
-							y=x.data[y];
-							return`<h1>${y.no} ${y.data}</h1>
-								<div class="flex aic">
-									<div class="tac cardm">
-										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}">
-										<h2>${x.member[y.member].name}</h2>
-										<p class="op">${x.member[y.member].aka.join('<br>')}</p>
-									</div>
-									<div class="grid cardd">
-										<h3 class="op">タグ</h3><h3>${y.tag.map(z=>x.tag[z]).join(', ')}</h3>
-										<h3 class="op">説明</h3><h3>${y.desc||'-'}</h3>
-										<h3 class="op">日付</h3><h3>${n2d(y.date).join('/')}</h3>
-									</div>
-								</div><hr>`;
-						}).join('');
+						document.title='しろけぷ発言まとめ - 詳細';
+						return'<hr>'+urlq.i.map(y=>{
+								y=x.data[y];if(!y)return;
+								return`<div>
+										<h1>${y.data}</h1>
+										<div class="flex">
+											<div>
+												<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="lpic"><br>
+												<b>${x.member[y.member].name}</b>
+											</div>
+											<div class="table" style="--clm:2;">
+												<div class="tar op wsnw">No.</div><div>${y.no}</div>
+												<div class="tar op wsnw">説明</div><div style="overflow-wrap:break-word;max-width:24em;">${y.desc||'??'}</div>
+												<div class="tar op wsnw">タグ</div><div>${y.tag.map(z=>x.tag[z]).join()}</div>
+												<div class="tar op wsnw">日付</div><div>${n2d(y.date).join('/')}</div>
+											</div>
+										</div>
+										<span class="op m">${x.member[y.member].aka.join(', ')}</span>
+									</div><hr>`;
+							}).join('');
 					}
-				][urlq.m]();
+				][(urlq.m||[0])[0]]();
 				wrap.textContent='';wrap.insertAdjacentHTML('beforeend',x);
 			}).catch(llog);
 		};
-		if(typeof urlq=='undefined')document.addEventListener('styexe',main);else main();
+		if(typeof urlq=='undefined')document.addEventListener('styexe',init);else init();
 	</script>
 </body>
 </html>

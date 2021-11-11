@@ -14,23 +14,18 @@
 		</table>
 	</div>
 	<hr>
-	<div class="flex fw">
+	<div class="flex fw top">
 		<div>
 			<h3>すべて</h3>
 			<ul>
-				<li><a href="viewer.html?m=list">すべて (<span id="total_">読み込み中…</span>件)</a></li>
-				<li><a href="viewer.html?m=item&r=1">おまかせ</a></li>
+				<li><a href="viewer.html">すべて (<span id="total_">読み込み中…</span>件)</a></li>
+				<li><a id="rand">おまかせ</a></li>
 			</ul>
 		</div>
 		<div><h3>月別</h3><ul id="month">読み込み中…</ul></div>
 		<div><h3>発言者別</h3><ul id="member">読み込み中…</ul></div>
 		<div><h3>タグ別</h3><ul id="tag">読み込み中…</ul></div>
 	</div>
-	<pre>viewer.html query parameter
-
-m	'list' or 'item'
-i	No. numbers
-r	choose randomly from i (0==all,-n==all-n)</pre>
 	<script>
 		const main=()=>fetch('main.json').then(r=>r.json()).then(x=>{
 				latest.textContent=n2d(x.data[x.data.length-1].date).join('/');
@@ -44,12 +39,13 @@ r	choose randomly from i (0==all,-n==all-n)</pre>
 					},{month:{},member:new Array(x.member.length).fill().map(()=>[]),tag:new Array(x.tag.length).fill().map(()=>[])});
 				month.textContent='';
 				month.insertAdjacentHTML('beforeend',
-					Object.entries(x.tmp.month).map(y=>`<li><a href="viewer.html?m=list&i=${y[1].join('+')}">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
+					Object.entries(x.tmp.month).map(y=>`<li><a href="viewer.html?i=${y[1].join('+')}">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
 				);
 				member.textContent='';
-				member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="viewer.html?m=list&i=${x.tmp.member[i].join('+')}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
+				member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.member[i].join('+')}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
 				tag.textContent='';
-				tag.insertAdjacentHTML('beforeend',x.tag.map((y,i)=>`<li><a href="viewer.html?m=list&i=${x.tmp.tag[i].join('+')}">${y} (${x.tmp.tag[i].length}件)</a></li>`).join(''));
+				tag.insertAdjacentHTML('beforeend',x.tag.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.tag[i].join('+')}">${y} (${x.tmp.tag[i].length}件)</a></li>`).join(''));
+				setInterval(()=>rand.href='viewer.html?m=1&i='+x.data[Math.floor(Math.random()*x.data.length)].no,500)
 			}).catch(llog);
 		if(typeof urlq=='undefined')document.addEventListener('styexe',main);else main();
 	</script>

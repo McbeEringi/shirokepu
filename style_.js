@@ -8,12 +8,11 @@ document.body.insertAdjacentHTML('afterbegin',`
 	}
 	@media print{a{color:inherit;text-decoration:none;}}
 	#log{white-space:pre-wrap;}
-	#wrap{break-inside:avoid;}
 	.ctof,.ctof>*{overflow:hidden;}.ctof>*{white-space:nowrap;width:100%;text-overflow:ellipsis;}
 	.tac{text-align:center;}.tar{text-align:right;}.op{opacity:.5;}
-	.flex{display:flex;}.fw{flex-wrap:wrap;}.jcsa{justify-content:space-between;}.flex>*,.pic::before{margin:auto 8px;}
+	.flex{display:flex;}.fw{flex-wrap:wrap;}.jcsa{justify-content:space-between;}.flex>*{margin:auto 4px;}
 	.grow{flex-grow:1;display:block;width:100%;}
-	.pic::before{content:"";display:inline-block;width:3em;height:3em;border-radius:25%;vertical-align:middle;flex-shrink:0;flex-grow:0;background:0 0/100% var(--pic);}
+	.pic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
 </style>
 <pre id="log"></pre>
 `);

@@ -23,9 +23,10 @@
 								</table>
 							</div><hr>`+urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
-								return`<div class="flex pic" style="--pic:url(img/m${y.member}.png);">
-									<a href="?m=2&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
-									<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+								return`<div class="flex">
+										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
+										<a href="?m=2&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
+										<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
 									</div>`;
 							}).join('');
 					},
@@ -33,9 +34,8 @@
 						document.title='しろけぷ発言まとめ - 概要';
 						return urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
-								return`<div class="flex pic" style="--pic:url(img/m${y.member}.png);">
-									<a href="?m=2&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
-									<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+								return`<div>
+										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
 									</div>`;
 							}).join('');
 					},

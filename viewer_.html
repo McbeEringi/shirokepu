@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<title>しろけぷ発言まとめ</title>
+</head>
+<body>
+	<script src="style.js" async></script>
+	<div id="wrap">読み込み中…</div>
+	<script>
+		const init=()=>{
+			fetch('main.json').then(r=>r.json()).then(x=>{
+				x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
+				if(!urlq.i)urlq.i=[...Object.keys(x.data)];
+				x=[
+					()=>{//S
+						document.title='しろけぷ発言まとめ - 一覧';
+						urlq.i.map(y=>{
+							y=x.data[y];
+							return`<div class="flex jcsa">
+								<a><h2>${y.no}. ${y.data}</h2></a>
+								<div class="flex"><img><div>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date)}</div></div>
+								</div>`;
+						}).join('')
+					},
+					()=>{//M
+						document.title='しろけぷ発言まとめ - 概要';
+
+					},
+					()=>{//L
+						document.title='しろけぷ発言まとめ - 詳細';
+
+					}
+				][urlq.s||0]();
+				wrap.textContent='';wrap.insertAdjacentHTML('beforeend',x);
+			}).catch(llog);
+		};
+		if(typeof urlq=='undefined')document.addEventListener('styexe',init);else init();
+	</script>
+</body>
+</html>

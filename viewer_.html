@@ -2,11 +2,12 @@
 <html lang="en" dir="ltr">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>しろけぷ発言まとめ</title>
 </head>
 <body>
-	<script src="style.js" async></script>
-	<div id="wrap">読み込み中…</div>
+	<script src="style_.js" async></script>
+	<div class="tac"><div id="wrap" style="display:inline-block;max-width:100%;">読み込み中…</div></div>
 	<script>
 		const init=()=>{
 			fetch('main.json').then(r=>r.json()).then(x=>{
@@ -15,23 +16,34 @@
 				x=[
 					()=>{//S
 						document.title='しろけぷ発言まとめ - 一覧';
-						urlq.i.map(y=>{
-							y=x.data[y];
-							return`<div class="flex jcsa">
-								<a><h2>${y.no}. ${y.data}</h2></a>
-								<div class="flex"><img><div>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date)}</div></div>
-								</div>`;
-						}).join('')
+						return`<div class="flex fw jcsa">
+								<h1>しろけぷ発言まとめ</h1>
+								<table>
+									<tr><td class="tar op">表示件数: </td><td>${urlq.i.length}</td></tr>
+								</table>
+							</div><hr>`+urlq.i.map(y=>{
+								y=x.data[y];if(!y)return;
+								return`<div class="flex pic" style="--pic:url(img/m${y.member}.png);">
+									<a href="?m=2&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
+									<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+									</div>`;
+							}).join('');
 					},
 					()=>{//M
 						document.title='しろけぷ発言まとめ - 概要';
-
+						return urlq.i.map(y=>{
+								y=x.data[y];if(!y)return;
+								return`<div class="flex pic" style="--pic:url(img/m${y.member}.png);">
+									<a href="?m=2&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
+									<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+									</div>`;
+							}).join('');
 					},
 					()=>{//L
 						document.title='しろけぷ発言まとめ - 詳細';
 
 					}
-				][urlq.s||0]();
+				][urlq.m||0]();
 				wrap.textContent='';wrap.insertAdjacentHTML('beforeend',x);
 			}).catch(llog);
 		};

@@ -8,15 +8,14 @@
 <body>
 	<script src="style.js" async></script>
 	<style>
-		#wrap{display:inline-block;position:relative;left:50%;transform:translateX(-50%);max-width:100%;min-width:50%;}
-		.bia{break-inside:avoid;}
-		.ctof,.ctof>*{overflow:hidden;}.ctof>*{white-space:nowrap;width:100%;text-overflow:ellipsis;}
+		.li:nth-of-type(2n+1){background-color:#8881;margin:4px 0;}
+		.bia{break-inside:avoid;}.s{font-size:small;}
+		.ctof,.ctof *{overflow:hidden;white-space:nowrap;width:100%;text-overflow:ellipsis;}.ctof *{margin:0;}
 		.grow{flex-grow:1;display:block;width:100%;}
-		.spic,.lpic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
-		.lpic{width:9em;height:9em;}
-		.wsnw{white-space:nowrap;}.table{display:grid;grid-gap:4px;grid-template-columns:repeat(var(--clm),auto);}
+		.pic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
+		.wsnw{white-space:nowrap;}.table{display:grid;grid-gap:4px;grid-template-columns:auto 1fr;}
 	</style>
-	<div><div id="wrap"></div></div>
+	<div id="wrap"></div>
 	<script>
 		const init=()=>{
 			fetch('main.json').then(r=>r.json()).then(x=>{
@@ -32,10 +31,12 @@
 								</table>
 							</div><hr>`+urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
-								return`<div class="flex bia">
-										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="spic">
-										<a href="?m=1&i=${y.no}" class="grow ctof"><h2>${y.data}</h2></a>
-										<div>No.${y.no}<br>${y.tag.map(z=>x.tag[z]).join()}<br>${n2d(y.date).join('/')}</div>
+								return`<div class="flex bia li">
+										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
+										<div class="grow ctof">
+											<a href="?m=1&i=${y.no}" class="ctof"><h2>${y.data}</h2></a>
+											<span class="op s">No.${y.no} ${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</span>
+										</div>
 									</div>`;
 							}).join('');
 					},
@@ -44,20 +45,17 @@
 						return'<hr>'+urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
 								return`<div>
-										<h1>${y.data}</h1>
 										<div class="flex">
+											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
 											<div>
-												<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="lpic"><br>
-												<b>${x.member[y.member].name}</b>
-											</div>
-											<div class="table" style="--clm:2;">
-												<div class="tar op wsnw">No.</div><div>${y.no}</div>
-												<div class="tar op wsnw">説明</div><div style="overflow-wrap:break-word;max-width:24em;">${y.desc||'??'}</div>
-												<div class="tar op wsnw">タグ</div><div>${y.tag.map(z=>x.tag[z]).join()}</div>
-												<div class="tar op wsnw">日付</div><div>${n2d(y.date).join('/')}</div>
+												<b>${x.member[y.member].name}</b><br>
+												<span class="op">${x.member[y.member].aka.join(', ')}</span>
 											</div>
 										</div>
-										<span class="op m">${x.member[y.member].aka.join(', ')}</span>
+										<h1><span class="op">${y.no}.</span> ${y.data}</h1>
+										<p>${y.desc||'??'}</p>
+										<span class="op">${y.tag.map(z=>x.tag[z]).join()}</span><br>
+										<span class="op">${n2d(y.date).join('/')}</span>
 									</div><hr>`;
 							}).join('');
 					}

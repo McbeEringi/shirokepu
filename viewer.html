@@ -45,7 +45,9 @@
 						return urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
 								return`<div class="bia">
-								                <hr>
+										<hr>
+										<h1><span class="op">${y.no}.</span> ${y.data}</h1>
+										<p>${y.desc||'??'}</p>
 										<div class="flex">
 											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
 											<div>
@@ -53,10 +55,7 @@
 												<span class="op s">${x.member[y.member].aka.join(', ')}</span>
 											</div>
 										</div>
-										<h1><span class="op">${y.no}.</span> ${y.data}</h1>
-										<p>${y.desc||'??'}</p>
-										<span class="op s">${y.tag.map(z=>x.tag[z]).join()}</span><br>
-										<span class="op s">${n2d(y.date).join('/')}</span>
+										<p class="op s">${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</p>
 									</div>`;
 							}).join('')+'<hr>';
 					}

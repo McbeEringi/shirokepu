@@ -42,9 +42,10 @@
 					},
 					()=>{
 						document.title='しろけぷ発言まとめ - 詳細';
-						return'<hr>'+urlq.i.map(y=>{
+						return urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
 								return`<div class="bia">
+								                <hr>
 										<div class="flex">
 											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
 											<div>
@@ -56,8 +57,8 @@
 										<p>${y.desc||'??'}</p>
 										<span class="op s">${y.tag.map(z=>x.tag[z]).join()}</span><br>
 										<span class="op s">${n2d(y.date).join('/')}</span>
-									</div><hr>`;
-							}).join('');
+									</div>`;
+							}).join('')+'<hr>';
 					}
 				][(urlq.m||[0])[0]]();
 				wrap.textContent='';wrap.insertAdjacentHTML('beforeend',x);

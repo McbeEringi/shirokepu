@@ -39,12 +39,12 @@
 					},{month:{},member:new Array(x.member.length).fill().map(()=>[]),tag:new Array(x.tag.length).fill().map(()=>[])});
 				month.textContent='';
 				month.insertAdjacentHTML('beforeend',
-					Object.entries(x.tmp.month).map(y=>`<li><a href="viewer.html?i=${y[1].join('+')}">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
+					Object.entries(x.tmp.month).map(y=>`<li><a href="viewer.html?i=${y[1].join('+')}&subt=20${y[0].substr(0,2)}年${y[0].substr(2,2)}月">20${y[0].substr(0,2)}/${y[0].substr(2,2)} (${y[1].length}件)</a></li>`).join('')
 				);
 				member.textContent='';
-				member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.member[i].join('+')}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
+				member.insertAdjacentHTML('beforeend',x.member.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.member[i].join('+')}&subt=発言者:${y.name}">${y.name} (${x.tmp.member[i].length}件)</a></li>`).join(''));
 				tag.textContent='';
-				tag.insertAdjacentHTML('beforeend',x.tag.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.tag[i].join('+')}">${y} (${x.tmp.tag[i].length}件)</a></li>`).join(''));
+				tag.insertAdjacentHTML('beforeend',x.tag.map((y,i)=>`<li><a href="viewer.html?i=${x.tmp.tag[i].join('+')}&subt=タグ:${y}">${y} (${x.tmp.tag[i].length}件)</a></li>`).join(''));
 				setInterval(()=>rand.href='viewer.html?m=1&i='+x.data[Math.floor(Math.random()*x.data.length)].no,500)
 			}).catch(llog);
 		if(typeof urlq=='undefined')document.addEventListener('styexe',main);else main();

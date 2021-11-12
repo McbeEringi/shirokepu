@@ -8,34 +8,48 @@
 <body>
 	<script src="style.js" async></script>
 	<style>
-		.li:nth-of-type(2n+1){background-color:#8881;margin:4px 0;}
+		.cover{display:none;position:relative;height:100vh;text-align:center;}
+		.cover>*{position:absolute;width:100%;transform:translateY(-50%);}
+		@media print{.cover{display:block;}.pdn{display:none;}}
+		.li{padding:4px 0;}.li:nth-of-type(2n+1){background-color:#8881;}
 		.bia{break-inside:avoid;}.s{font-size:small;}
 		.ctof,.ctof *{overflow:hidden;white-space:nowrap;width:100%;text-overflow:ellipsis;}.ctof *{margin:0;}
 		.grow{flex-grow:1;display:block;width:100%;}
 		.pic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
 		.wsnw{white-space:nowrap;}.table{display:grid;grid-gap:4px;grid-template-columns:auto 1fr;}
 	</style>
+	<div class="cover">
+		<div style="top:25%;">
+			<h1>しろけぷ発言まとめ</h1>
+			<h2 id="subt"></h2>
+		</div>
+		<hr style="top:50%;">
+	</div>
 	<div id="wrap"></div>
+	<div class="cover"></div>
 	<script>
 		const init=()=>{
+			subt.textContent=(urlq.subt||[]).map(decodeURIComponent).join('+');
 			fetch('main.json').then(r=>r.json()).then(x=>{
 				x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
 				if(!urlq.i)urlq.i=[...Object.keys(x.data)];
 				x=[
 					()=>{
 						document.title='しろけぷ発言まとめ - 一覧';
-						return`<div class="flex fw jcsa">
+						return`<div class="flex fw jcsa pdn">
 								<h1>しろけぷ発言まとめ</h1>
 								<table>
 									<tr><td class="tar op">表示件数: </td><td>${urlq.i.length}</td></tr>
 								</table>
-							</div><hr>`+urlq.i.map(y=>{
+							</div><hr class="pdn">`+urlq.i.map(y=>{
 								y=x.data[y];if(!y)return;
-								return`<div class="flex bia li">
-										<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
-										<div class="grow ctof">
-											<a href="?m=1&i=${y.no}" class="ctof"><h2>${y.data}</h2></a>
-											<span class="op s">No.${y.no} ${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</span>
+								return`<div class="bia li">
+										<div class="flex">
+											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
+											<div class="grow ctof">
+												<a href="?m=1&i=${y.no}" class="ctof"><h2>${y.data}</h2></a>
+												<span class="op s">No.${y.no} ${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</span>
+											</div>
 										</div>
 									</div>`;
 							}).join('');

@@ -54,8 +54,8 @@
 										</div>
 										<h1><span class="op">${y.no}.</span> ${y.data}</h1>
 										<p>${y.desc||'??'}</p>
-										<span class="op m">${y.tag.map(z=>x.tag[z]).join()}</span><br>
-										<span class="op m">${n2d(y.date).join('/')}</span>
+										<span class="op s">${y.tag.map(z=>x.tag[z]).join()}</span><br>
+										<span class="op s">${n2d(y.date).join('/')}</span>
 									</div><hr>`;
 							}).join('');
 					}

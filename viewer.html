@@ -8,7 +8,7 @@
 <body>
 	<script src="style.js" async></script>
 	<style>
-		.cover{display:none;position:relative;height:100vh;text-align:center;}
+		.cover{display:none;height:100vh;text-align:center;break-after: always;}
 		.cover>*{position:absolute;width:100%;transform:translateY(-50%);}
 		@media print{.cover{display:block;}.pdn{display:none;}}
 		.li{padding:4px 0;}.li:nth-of-type(2n+1){background-color:#8881;}
@@ -32,16 +32,17 @@
 			subt.textContent=(urlq.subt||[]).map(decodeURIComponent).join('+');
 			fetch('main.json').then(r=>r.json()).then(x=>{
 				x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
-				if(!urlq.i)urlq.i=[...Object.keys(x.data)];
+				x.tmp=urlq.i||[...Object.keys(x.data)];
 				x=[
 					()=>{
 						document.title='しろけぷ発言まとめ - 一覧';
 						return`<div class="flex fw jcsa pdn">
 								<h1>しろけぷ発言まとめ</h1>
 								<table>
-									<tr><td class="tar op">表示件数: </td><td>${urlq.i.length}</td></tr>
+									<tr><td class="tar op">表示件数: </td><td>${x.tmp.length}</td></tr>
+									<tr><td class="tar"><a href="?${urlq_({m:[1]})}">詳細一覧</a></td></tr>
 								</table>
-							</div><hr class="pdn">`+urlq.i.map(y=>{
+							</div><hr class="pdn">`+x.tmp.map(y=>{
 								y=x.data[y];if(!y)return;
 								return`<div class="bia li">
 										<div class="flex">
@@ -56,7 +57,7 @@
 					},
 					()=>{
 						document.title='しろけぷ発言まとめ - 詳細';
-						return urlq.i.map(y=>{
+						return x.tmp.map(y=>{
 								y=x.data[y];if(!y)return;
 								return`<div class="bia">
 										<hr>

@@ -14,7 +14,8 @@ document.body.insertAdjacentHTML('afterbegin',`
 <pre id="log"></pre>
 `);
 const llog=(...x)=>log.textContent+=`${x.join(', ')}\n`,
-urlq=Object.fromEntries(location.search.substr(1).split('&').map(x=>x.split('=',2).map(y=>y.split('+')))),
+urlq=Object.fromEntries(location.search.substr(1).split('&').filter(y=>y).map(x=>x.split('=',2).map(y=>y.split('+')))),
+urlq_=x=>Object.entries({...urlq,...x}).map(y=>y[0]+'='+y[1].join('+')).join('&'),
 n2d=x=>{if(!x)return;x=`20${x}`;return[x.substr(0,4),x.substr(4,2),x.substr(6,2)];};
 document.dispatchEvent(new Event('styexe'));
 console.log(urlq);

@@ -46,7 +46,7 @@
 				},Object.fromEntries(['month','member','tag'].map(y=>[y,new Array(x[y].length).fill().map(()=>[])])));
 				wrap.insertAdjacentHTML('beforeend',
 					[['月別','month',''],['発言者別','member','発言者:'],['タグ別','tag','タグ:']]
-						.map(y=>[y[0],x[y[1]].map((z,i)=>`<li><a href="viewer.html?i=${x.tmp[y[1]][i].join('+')}&subt=${y[2]}${z.name||z}">${z.name||z} (${x.tmp[y[1]][i].length}件)</a></li>`)])
+						.map(y=>[y[0],x[y[1]].map((z,i)=>`<li><a href="viewer.html?${urlq_({i:x.tmp[y[1]][i],subt:[y[2]+(z.name||z)]})}">${z.name||z} (${x.tmp[y[1]][i].length}件)</a></li>`)])
 						.map(y=>`<div><h3>${y[0]}</h3><ul>${y[1].join('')}</ul></div>`).join('')
 				);
 

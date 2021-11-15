@@ -59,7 +59,7 @@
 							h=(c.height-64)/Math.max(...arr.map(z=>z[1]));
 						ctx.fillRect(0,0,c.width,c.height);
 						arr.forEach((z,i)=>{
-							ctx.fillStyle='#68f';ctx.fillRect((i+.2)*w,c.height-z[1]*h,w*.6,z[1]*h);
+							ctx.fillStyle='#48f';ctx.fillRect((i+.2)*w,c.height-z[1]*h,w*.6,z[1]*h);
 							ctx.fillStyle='#fff';ctx.fillText(z[0],(i+.5)*w,c.height-4,w*.6);ctx.fillText(z[1]+'件',(i+.5)*w,c.height-36,w*.6);
 						});
 						ctx.font='32px sans-serif';ctx.fillText(y[1],c.width*.5,48,c.width);

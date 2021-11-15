@@ -8,7 +8,8 @@
 <body>
 	<script src="style.js" async></script>
 	<style>
-		img{display:inline-block;max-width:640px;background-color:#333;margin:4px;vertical-align:top;}
+		:root{background-color:#000;}
+		img{display:inline-block;max-width:640px;margin:4px;vertical-align:top;}
 	</style>
 	<script>
 		const main=()=>fetch('main.json').then(r=>r.json()).then(x=>{
@@ -17,7 +18,7 @@
 					[x.month,(y,i)=>[y,x.data.reduce((a,z)=>a+(z.month==i),0)],'月別 発言数合計'],
 					[x.member,(y,i)=>[y.name,x.data.reduce((a,z)=>a+(z.member==i),0)],'発言数合計'],
 					[x.tag,(y,i)=>[y,x.data.reduce((a,z)=>a+z.tag.includes(i),0)],'タグ別 発言数合計']
-				].forEach(y=>{
+				].forEach(async y=>{
 					y[1]=y[0].map(y[1]);
 					const c=document.createElement('canvas'),
 						ctx=c.getContext('2d'),
@@ -28,12 +29,14 @@
 					ctx.imageSmoothingEnabled=false;
 					ctx.textAlign='center';
 					ctx.font='24px sans-serif';
+					ctx.fillStyle='#222';
+					ctx.fillRect(0,0,c.width,c.height);
 					y[1].forEach((z,i)=>{
 						ctx.fillStyle='#68f';
 						ctx.fillRect((i+.2)*w,c.height-z[1]*h,w*.6,z[1]*h);
 						ctx.fillStyle='#fff';
-						ctx.fillText(z[0],(i+.5)*w,c.height,w*.6);
-						ctx.fillText(z[1]+'件',(i+.5)*w,c.height-32,w*.6);
+						ctx.fillText(z[0],(i+.5)*w,c.height-4,w*.6);
+						ctx.fillText(z[1]+'件',(i+.5)*w,c.height-36,w*.6);
 					});
 					ctx.font='32px sans-serif';
 					ctx.fillText(y[2],c.width*.5,48,c.width);

@@ -7,6 +7,9 @@
 </head>
 <body>
 	<script src="style.js" async></script>
+	<style>
+		img{display:inline-block;width:100%;max-width:480px;vertical-align:top;}
+	</style>
 	<div class="flex fw jcsa">
 		<h1>しろけぷ発言まとめ</h1>
 		<table>
@@ -21,27 +24,51 @@
 			<ul>
 				<li><a href="viewer.html">すべて</a></li>
 				<li><a id="rand">おまかせ</a></li>
-				<li><a href="graph.html">グラフ</a></li>
 			</ul>
 		</div>
 	</div>
 	<script>
 		const main=()=>fetch('main.json').then(r=>r.json()).then(x=>{
-				month(x);
 				latest.textContent=n2d(x.data[x.data.length-1].date).join('/');
 				total.textContent=x.data.length;
 				setInterval(()=>rand.href='viewer.html?m=1&i='+x.data[Math.floor(Math.random()*x.data.length)].no,500);
+
+				x.data=x.data.map(y=>[y,Math.floor(y.date*.01)]);
+				x.month=[...new Set(x.data.map(y=>y[1]))];
+				x.tmp=Object.fromEntries(x.month.map((y,i)=>[y,i]));
+				x.data=x.data.map(y=>({...y[0],month:x.tmp[y[1]]}));
+				x.month=x.month.map(y=>`20${Math.floor(y*.01)}年${y%100}月`);
 				x.tmp=x.data.reduce((a,y)=>{
 					a.month[y.month].push(y.no);
 					a.member[y.member].push(y.no);
 					y.tag.forEach(z=>a.tag[z].push(y.no));
 					return a;
-				},{month:new Array(x.month.length).fill().map(()=>[]),member:new Array(x.month.length).fill().map(()=>[]),tag:new Array(x.month.length).fill().map(()=>[])});
+				},Object.fromEntries(['month','member','tag'].map(y=>[y,new Array(x[y].length).fill().map(()=>[])])));
 				wrap.insertAdjacentHTML('beforeend',
-					[['month','月別',''],['member','発言者別','発言者:'],['tag','タグ別','タグ:']]
-					.map(y=>[x[y[0]].map((z,i)=>`<li><a href="viewer.html?i=${x.tmp[y[0]][i].join('+')}&subt=${y[2]}${z.name||z}">${z.name||z} (${x.tmp[y[0]][i].length}件)</a></li>`),y[1]])
-					.map(y=>`<div><h3>${y[1]}</h3><ul>${y[0].join('')}</ul></div>`).join('')
+					[['月別','month',''],['発言者別','member','発言者:'],['タグ別','tag','タグ:']]
+						.map(y=>[y[0],x[y[1]].map((z,i)=>`<li><a href="viewer.html?i=${x.tmp[y[1]][i].join('+')}&subt=${y[2]}${z.name||z}">${z.name||z} (${x.tmp[y[1]][i].length}件)</a></li>`)])
+						.map(y=>`<div><h3>${y[0]}</h3><ul>${y[1].join('')}</ul></div>`).join('')
 				);
+
+				[['month','月別 発言数合計'],['member','発言数合計'],['tag','タグ別 発言数合計']]
+					.forEach(y=>{
+						const arr=x[y[0]].map((z,i)=>[z.name||z,x.tmp[y[0]][i].length]),
+							c=Object.assign(document.createElement('canvas'),{width:1024,height:1024*.5625}),
+							ctx=Object.assign(c.getContext('2d'),{imageSmoothingEnabled:false,textAlign:'center',font:'24px sans-serif',fillStyle:'#222'}),
+							w=c.width/x[y[0]].length,
+							h=(c.height-64)/Math.max(...arr.map(z=>z[1]));
+						ctx.fillRect(0,0,c.width,c.height);
+						arr.forEach((z,i)=>{
+							ctx.fillStyle='#68f';ctx.fillRect((i+.2)*w,c.height-z[1]*h,w*.6,z[1]*h);
+							ctx.fillStyle='#fff';ctx.fillText(z[0],(i+.5)*w,c.height-4,w*.6);ctx.fillText(z[1]+'件',(i+.5)*w,c.height-36,w*.6);
+						});
+						ctx.font='32px sans-serif';ctx.fillText(y[1],c.width*.5,48,c.width);
+						c.toBlob(b=>{
+							const img=document.createElement('img');
+							img.onload=()=>URL.revokeObjectURL(img.src);
+							img.src=URL.createObjectURL(b);document.body.appendChild(img);
+						});
+					});
 			}).catch(llog);
 		if(typeof urlq=='undefined')document.addEventListener('styexe',main);else main();
 	</script>

@@ -10,18 +10,14 @@
 	WIP
 	<script>
 		const main=()=>fetch('main.json').then(r=>r.json()).then(x=>{
-				x.tmp=x.data.map(y=>[y,Math.floor(y.date*.01)]);
-				x.month=[...new Set(x.tmp.map(y=>y[1]))];
-				x.mtmp=Object.fromEntries(x.month.map((y,i)=>[y,i]));
-				x.tmp=x.tmp.map(y=>({...y[0],month:x.mtmp[y[1]]}));
-
+				month(x);
 				[
-					[x.month,(y,i)=>[`20${Math.floor(y*.01)}年${y%100}月`,x.tmp.reduce((a,z)=>a+(z.month==i),0)]],
-					[x.member,(y,i)=>[y.name,x.tmp.reduce((a,z)=>a+(z.member==i),0)]],
-					[x.tag,(y,i)=>[y,x.tmp.reduce((a,z)=>a+z.tag.includes(i),0)]]
+					[x.month,(y,i)=>[y,x.data.reduce((a,z)=>a+(z.month==i),0)]],
+					[x.member,(y,i)=>[y.name,x.data.reduce((a,z)=>a+(z.member==i),0)]],
+					[x.tag,(y,i)=>[y,x.data.reduce((a,z)=>a+z.tag.includes(i),0)]]
 				].forEach(y=>{
 					console.log(y[0].map(y[1]));
-				})
+				});
 			}).catch(llog);
 		if(typeof urlq=='undefined')document.addEventListener('styexe',main);else main();
 	</script>

@@ -16,6 +16,14 @@ document.body.insertAdjacentHTML('afterbegin',`
 const llog=(...x)=>log.textContent+=`${x.join(', ')}\n`,
 urlq=Object.fromEntries(location.search.substr(1).split('&').filter(y=>y).map(x=>x.split('=',2).map(y=>y.split('+')))),
 urlq_=x=>Object.entries({...urlq,...x}).map(y=>y[0]+'='+y[1].join('+')).join('&'),
-n2d=x=>{if(!x)return;x=`20${x}`;return[x.substr(0,4),x.substr(4,2),x.substr(6,2)];};
+n2d=x=>{if(!x)return;x=`20${x}`;return[x.substr(0,4),x.substr(4,2),x.substr(6,2)];},
+month=x=>{
+	x.data=x.data.map(y=>[y,Math.floor(y.date*.01)]);
+	x.month=[...new Set(x.data.map(y=>y[1]))];
+	x.tmp=Object.fromEntries(x.month.map((y,i)=>[y,i]));
+	x.data=x.data.map(y=>({...y[0],month:x.tmp[y[1]]}));
+	x.month=x.month.map(y=>`20${Math.floor(y*.01)}年${y%100}月`);
+	delete x.tmp;
+};
 document.dispatchEvent(new Event('styexe'));
 console.log(urlq);

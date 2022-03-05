@@ -4,19 +4,17 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>しろけぷ発言まとめ</title>
+	<link rel="stylesheet" href="https://mcbeeringi.github.io/src/style.css">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<script src="style.js" async></script>
 	<style>
-		.cover{display:none;position:relative;height:100vh;text-align:center;break-after:always;}
+		.cover{display:none;position:relative;height:100vh;text-align:center;break-inside:avoid;}
 		.cover>*{position:absolute;width:100%;transform:translateY(-50%);}
-		@media print{.cover{display:block;}.pdn{display:none;}}
-		.li{padding:4px 0;}.li:nth-of-type(2n+1){background-color:#8881;}
-		.bia{break-inside:avoid;}.s{font-size:small;}
-		.ctof,.ctof *{overflow:hidden;white-space:nowrap;width:100%;text-overflow:ellipsis;}.ctof *{margin:0;}
-		.grow{flex-grow:1;display:block;width:100%;}
-		.pic{width:3.5em;height:3.5em;border-radius:25%;vertical-align:middle;flex-shrink:0;}
-		.wsnw{white-space:nowrap;}.table{display:grid;grid-gap:4px;grid-template-columns:auto 1fr;}
+		@media print{.cover{display:block;}}
+		img{width:3.5em;height:3.5em;border-radius:50%;vertical-align:middle;}
+		table{display:inline-block;vertical-align:middle;}
+		.vflex{display:flex;flex-direction:column;}.vflex>a{flex-grow:1;display:flex;align-items:center;}.vflex>hr{width:100%;}
 	</style>
 	<div class="cover">
 		<div style="top:25%;">
@@ -25,60 +23,48 @@
 		</div>
 		<hr style="top:50%;">
 	</div>
-	<div id="wrap"></div>
+	<div id="wrap" class="stuff">読み込み中…</div>
 	<div class="cover"></div>
+	<script src="com.js"></script>
 	<script>
-		const init=()=>{
-			subt.textContent=(urlq.subt||[]).map(decodeURIComponent).join('+');
-			fetch('main.json').then(r=>r.json()).then(x=>{
-				x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
-				x.tmp=urlq.i||[...Object.keys(x.data)];
-				x=[
-					()=>{
-						document.title='しろけぷ発言まとめ - 一覧';
-						return`<div class="flex fw jcsa pdn">
-								<h1>しろけぷ発言まとめ</h1>
-								<table>
-									<tr><td class="tar op">表示件数: </td><td>${x.tmp.length}</td></tr>
-									<tr><td class="tar"><a href="?${urlq_({m:[1]})}">詳細一覧</a></td></tr>
-								</table>
-							</div><hr class="pdn">`+x.tmp.map(y=>{
-								y=x.data[y];if(!y)return;
-								return`<div class="bia li">
-										<div class="flex">
-											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
-											<div class="grow ctof">
-												<a href="?m=1&i=${y.no}" class="ctof"><h2>${y.data}</h2></a>
-												<span class="op s">No.${y.no} ${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</span>
-											</div>
-										</div>
-									</div>`;
-							}).join('');
-					},
-					()=>{
-						document.title='しろけぷ発言まとめ - 詳細';
-						return x.tmp.map(y=>{
-								y=x.data[y];if(!y)return;
-								return`<div class="bia">
-										<hr>
-										<h1><span class="op">${y.no}.</span> ${y.data}</h1>
-										<p>${y.desc||'??'}</p>
-										<div class="flex">
-											<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
-											<div>
-												<b>${x.member[y.member].name}</b><br>
-												<span class="op s">${x.member[y.member].aka.join(', ')}</span>
-											</div>
-										</div>
-										<p class="op s">${n2d(y.date).join('/')} ${y.tag.map(z=>x.tag[z]).join()}</p>
-									</div>`;
-							}).join('')+'<hr>';
-					}
-				][(urlq.m||[0])[0]]();
-				wrap.textContent='';wrap.insertAdjacentHTML('beforeend',x);
-			}).catch(llog);
-		};
-		if(typeof urlq=='undefined')document.addEventListener('styexe',init);else init();
+		subt.textContent=(urlq.subt||[]).map(decodeURIComponent).join('+');
+		fetch('main.json').then(x=>x.json()).then(x=>{
+			x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
+			x.tmp=urlq.i||[...Object.keys(x.data)];
+			wrap.textContent='';
+			[
+				()=>{
+					document.title='しろけぷ発言まとめ - 一覧';
+					wrap.style.cssText='--gs:280px;';
+					wrap.insertAdjacentHTML('beforebegin',`<div class="title"><h1>しろけぷ発言まとめ</h1><div><a href="?${urlq_({m:[1]})}">詳細一覧</a> ${table(['表示項目:',subt.textContent||'??'],['表示件数:',x.tmp.length])}</div></div><hr>`);
+					wrap.insertAdjacentHTML('beforeend',x.tmp.map(y=>{
+						y=x.data[y];if(!y)return;
+						return`<div class="vflex">
+								<a href="?m=1&i=${y.no}"><h2>${y.data}</h2></a>
+								<hr>
+								<div>
+									<img src="img/m${y.member}.png" alt="${x.member[y.member].name}">
+									${table(['番号:',y.no],['日付:',n2d(y.date).join('/')],['タグ:',...y.tag.map(z=>x.tag[z])])}
+								</div>
+							</div>`;
+					}).join(''));
+				},
+				()=>{
+					document.title='しろけぷ発言まとめ - 詳細';
+					wrap.style.cssText='--gs:640px;';
+					wrap.insertAdjacentHTML('beforeend',x.tmp.map(y=>{
+						y=x.data[y];if(!y)return;
+						return`<div>
+								${table(['<h1>'+y.no+'. </h1>','<h1>'+y.data+'</h1>'],['',y.desc||'??'])}
+								<hr>
+								<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
+								${table(['名前:',x.member[y.member].name],['属性:',...x.member[y.member].aka])}<br>
+								${table(['日付:',n2d(y.date).join('/')],['タグ:',...y.tag.map(z=>x.tag[z])])}
+							</div>`;
+					}).join(''));
+				}
+			][+(urlq.m||[0])[0]]();
+		}).catch(llog);
 	</script>
 </body>
 </html>

@@ -63,7 +63,7 @@
 				y.forEach(z=>e.appendChild(z));
 				wrap.appendChild(e);
 			});
-			draw();window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',draw);window.matchMedia('print').addEventListener('change',draw);
+			draw();window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',draw);
 
 			breaf.textContent='';
 			breaf.insertAdjacentHTML('beforeend',table([['最終追加日:',n2d(x.data[x.data.length-1].date).join('/')],['発言総数:',x.data.length]]));

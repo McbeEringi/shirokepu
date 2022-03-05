@@ -4,7 +4,7 @@
 	:link{color:var(--b0);}:link:active{color:var(--b2);}:visited{color:var(--p0);}:visited:active{color:var(--p2);}
 }
 @media print{
-	:root{--bc:#fff;--fc:#000;--graph:#ccc;}
+	:root{--bc:#fff;--fc:#000;}
 	:root::before{display:none;}
 	a{color:var(--fc) !important;text-decoration:none;}
 }

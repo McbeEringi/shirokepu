@@ -4,10 +4,12 @@ Promise.all(
 	.map(x=>new Promise(f=>x=Object.assign(new Image(),{src:x,onload:()=>f(x)})))
 ).then(img=>{
 	console.log(img);
-	const ctx=bgc.getContext('2d'),
+	const w=()=>document.documentElement.clientWidth,
+		h=()=>document.documentElement.clientHeight
+		ctx=bgc.getContext('2d'),
 		draw=()=>{
 			ctx.clearRect(0,0,bgc.width,bgc.height);
-			const size=[Math.ceil(innerWidth/256),Math.ceil(innerHeight/256)],
+			const size=[Math.ceil(w()/256),Math.ceil(h()/256)],
 				rand=new Uint8Array(size[0]*size[1]);
 			crypto.getRandomValues(rand);console.log(rand);
 			new Array(size[0]).fill().map((_,i)=>
@@ -18,7 +20,6 @@ Promise.all(
 					ctx.restore();
 				})
 			);
-			
 		};
-	(onresize=()=>{bgc.width=innerWidth*devicePixelRatio;bgc.height=innerHeight*devicePixelRatio;bgc.style.width=innerWidth+'px';bgc.style.height=innerHeight+'px';ctx.scale(devicePixelRatio,devicePixelRatio);draw();})();
+	(onresize=()=>{bgc.width=w()*devicePixelRatio;bgc.height=h()*devicePixelRatio;bgc.style.width=w()+'px';bgc.style.height=h()+'px';ctx.scale(devicePixelRatio,devicePixelRatio);draw();})();
 });

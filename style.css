@@ -1,4 +1,5 @@
-:root{--graph:#48f;--gs:220px;}
+:root{--graph:#48f;--gs:220px;image-rendering:auto;}
+:root::before{background:0 0/512px url(img/grid.svg);opacity:.5;}
 .stuff{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(var(--gs),100%),1fr));gap:4px;}
 .stuff>*{background-color:var(--g3);padding:4px;box-sizing:border-box;border-radius:8px;break-inside:avoid;}
 th{color:var(--g0);text-align:right;}td{color:var(--fc);}img{max-width:100%;}
@@ -9,7 +10,6 @@ th{color:var(--g0);text-align:right;}td{color:var(--fc);}img{max-width:100%;}
 }
 @media print{
 	:root{--bc:#fff;--fc:#000;}
-	:root::before{display:none;}
 	a{color:var(--fc) !important;text-decoration:none;}
 	.stuff>*{border:4px solid var(--g2);padding:0;}
 }

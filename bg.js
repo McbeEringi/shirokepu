@@ -1,4 +1,4 @@
-document.body.insertAdjacentHTML('afterbegin',`<canvas id="bgc"></canvas><pre id="log"></pre>`);
+document.body.insertAdjacentHTML('afterbegin',`<canvas id="bgc"></canvas>`);
 Promise.all(
 	['img/ico/m0.png','img/ico/m1.png','img/ico/m2.png','img/ico/m3.png','img/ico/i0.png','img/ico/i1.png','img/ico/i2.png','img/ico/i3.png']
 	.map(x=>new Promise(f=>x=Object.assign(new Image(),{src:x,onload:()=>f(x)})))

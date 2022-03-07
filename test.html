@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+	<script src="https://cdn.jsdelivr.net/gh/liabru/matter-js/build/matter.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/liabru/matter-wrap/build/matter-wrap.min.js"></script>
+	<style>
+		:root{background-color:#222;}
+		#c{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);}
+	</style>
+	<canvas id="c"></canvas>
+	<script>
+		Matter.use(MatterWrap);
+		const engine=Matter.Engine.create({gravity:{scale:0}}),
+			render=Matter.Render.create({
+				canvas:c,
+				engine,
+				options:{
+					width:document.documentElement.clientWidth,height:document.documentElement.clientHeight,
+					pixelRatio:'auto',//showMousePosition:true,
+					wireframes:false,background:'#0000'
+				}
+			}),
+			stack=Matter.Composites.stack(10,10,8,8,10,10,(x,y)=>{
+				const s=Matter.Common.random(10,40);
+				return Matter.Bodies.circle(x,y,s,{
+					frictionAir:.001,restitution:.5,
+					render:{sprite:{texture:`img/ico/${['m0','m1','m2','m3','i0','i1','i2','i3'][Math.floor(((s*10)%1)*8)]}.png`,xScale:s/128,yScale:s/128}},
+					plugin:{wrap:{min:{x:render.bounds.min.x,y:render.bounds.min.y},max:{x:render.bounds.max.x,y:render.bounds.max.y}}}
+				});
+			}),
+			mouse=Matter.Mouse.create(render.canvas),
+			mc=Matter.MouseConstraint.create(engine,{mouse,constraint:{render:{visible:false}}}),
+			runner=Matter.Runner.create();
+
+		mouse.pixelRatio=+mouse.element.getAttribute('data-pixel-ratio')||1;
+		render.mouse=mouse;
+		Matter.Events.on(render,'afterRender',()=>Object.keys(render.textures).forEach(i=>{
+			if(render.textures[i].tagName=='IMG'&&!render.textures[i].onload)
+				render.textures[i].onload=()=>{
+					const _c=Object.assign(document.createElement('canvas'),{
+							width:render.textures[i].width,
+							height:render.textures[i].height
+						}),
+						_ctx=_c.getContext('2d');
+					_ctx.beginPath();
+					_ctx.ellipse(_c.width/2,_c.height/2,_c.width/2,_c.height/2,0,0, 2*Math.PI);
+					_ctx.clip();
+					_ctx.drawImage(render.textures[i],0,0);
+					render.textures[i]=_c;
+				};
+		}));
+		Matter.Body.setVelocity(stack.bodies[0],Matter.Vector.create(-100,-100));
+		Matter.Composite.add(engine.world,[stack,mc]);
+		Matter.Render.run(render);
+		Matter.Runner.run(runner,engine);
+	</script>
+</body>
+</html>

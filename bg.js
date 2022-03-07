@@ -1,11 +1,11 @@
 'use strict'; 
 document.body.insertAdjacentHTML('afterbegin',`<canvas id="c" style="opacity:0;"></canvas>`);
 Promise.all([
-	fetch('https://cdn.jsdelivr.net/gh/liabru/matter-js/build/matter.min.js').then(x=>x.text()),
-	fetch('https://cdn.jsdelivr.net/gh/liabru/matter-wrap/build/matter-wrap.min.js').then(x=>x.text()),
-	//fetch('https://mcbeeringi.github.io/src/matter/floatpr.js').then(x=>x.text()),
-	fetch('https://mcbeeringi.github.io/src/matter/spriter.js').then(x=>x.text())
-]).then(x=>{
+	fetch('https://cdn.jsdelivr.net/gh/liabru/matter-js/build/matter.min.js'),
+	fetch('https://cdn.jsdelivr.net/gh/liabru/matter-wrap/build/matter-wrap.min.js'),
+	//fetch('https://mcbeeringi.github.io/src/matter/floatpr.js'),
+	fetch('https://mcbeeringi.github.io/src/matter/spriter.js')
+].map(x=>x.then(y=>y.text()))).then(x=>{
 	Function(x.join('\n'))();
 	Matter.use(MatterWrap);
 	//Matter.use(FloatPR);

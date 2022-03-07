@@ -5,71 +5,51 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-	<script src="https://cdn.jsdelivr.net/gh/liabru/matter-js/build/matter.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/liabru/matter-wrap/build/matter-wrap.min.js"></script>
 	<style>
 		:root{background-color:#222;}
 		#c{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);}
 	</style>
 	<canvas id="c"></canvas>
 	<script>
-		const FloatPR={
-			name:'float-pixelRatio',version:'0.1.0',for:'matter-js@*',
-			install(base){base.after('Mouse.create',function(){this.pixelRatio=+this.element.getAttribute('data-pixel-ratio')||1;});}
-		};Matter.Plugin.register(FloatPR);
-		const Spriter={
-			name:'spriter',version:'0.1.0',for:'matter-js@*',
-			install(base){base.after('Render.bodies',function(){
-				const r=arguments[0];
-				Object.keys(r.textures).forEach(i=>{
-					if(!Spriter.textures[i]){Spriter.textures[i]={apply(c){r.textures[i]=c;},img:r.textures[i]};Spriter.exeMod(i);}
-				});
-			});},
-			textures:{},mods:{},
-			stdMod:(ctx,img)=>ctx.drawImage(img,0,0),
-			setMod(i,fx){Spriter.mods[i]=fx;Spriter.exeMod(i);},
-			exeMod(i){
-				Spriter.textures[i].img.onload=()=>{
-					const {width,height}=Spriter.textures[i].img,
-						c=Object.assign(document.createElement('canvas'),{width,height});
-					(Spriter.mods[i]||Spriter.stdMod)(c.getContext('2d'),Spriter.textures[i].img);
-					Spriter.textures[i].apply(c);
-				};
-				if(Spriter.textures[i].img.complete)Spriter.textures[i].img.onload();
-			}
-		};Matter.Plugin.register(Spriter);
+		Promise.all([
+			fetch('https://cdn.jsdelivr.net/gh/liabru/matter-js/build/matter.min.js'),
+			fetch('https://cdn.jsdelivr.net/gh/liabru/matter-wrap/build/matter-wrap.min.js'),
+			fetch('https://mcbeeringi.github.io/src/matter/floatpr.js'),
+			fetch('https://mcbeeringi.github.io/src/matter/spriter.js')
+		].map(x=>x.then(y=>y.text()))).then(x=>{
+			Function(x.join('\n'))();
+			Matter.use(MatterWrap);
+			Matter.use(FloatPR);
+			Matter.use(Spriter);
+			const engine=Matter.Engine.create({gravity:{scale:0}}),
+				render=Matter.Render.create({
+					canvas:c,
+					engine,
+					options:{
+						width:document.documentElement.clientWidth,height:document.documentElement.clientHeight,
+						pixelRatio:'auto',//showMousePosition:true,
+						wireframes:false,background:'#0000'
+					}
+				}),
+				stack=Matter.Composites.stack(10,10,8,8,10,10,(x,y)=>{
+					const s=Matter.Common.random(10,40);
+					return Matter.Bodies.circle(x,y,s,{
+						frictionAir:.001,restitution:.5,
+						render:{sprite:{texture:`img/ico/${['m0','m1','m2','m3','i0','i1','i2','i3'][Math.floor(((s*10)%1)*8)]}.png`,xScale:s/128,yScale:s/128}},
+						plugin:{wrap:{min:{x:render.bounds.min.x,y:render.bounds.min.y},max:{x:render.bounds.max.x,y:render.bounds.max.y}}}
+					});
+				}),
+				mouse=Matter.Mouse.create(render.canvas),
+				mc=Matter.MouseConstraint.create(engine,{mouse,constraint:{render:{visible:false}}}),
+				runner=Matter.Runner.create();
 
-		Matter.use(MatterWrap);
-		Matter.use(FloatPR);
-		Matter.use(Spriter);
-		const engine=Matter.Engine.create({gravity:{scale:0}}),
-			render=Matter.Render.create({
-				canvas:c,
-				engine,
-				options:{
-					width:document.documentElement.clientWidth,height:document.documentElement.clientHeight,
-					pixelRatio:'auto',//showMousePosition:true,
-					wireframes:false,background:'#0000'
-				}
-			}),
-			stack=Matter.Composites.stack(10,10,8,8,10,10,(x,y)=>{
-				const s=Matter.Common.random(10,40);
-				return Matter.Bodies.circle(x,y,s,{
-					frictionAir:.001,restitution:.5,
-					render:{sprite:{texture:`img/ico/${['m0','m1','m2','m3','i0','i1','i2','i3'][Math.floor(((s*10)%1)*8)]}.png`,xScale:s/128,yScale:s/128}},
-					plugin:{wrap:{min:{x:render.bounds.min.x,y:render.bounds.min.y},max:{x:render.bounds.max.x,y:render.bounds.max.y}}}
-				});
-			}),
-			mouse=Matter.Mouse.create(render.canvas),
-			mc=Matter.MouseConstraint.create(engine,{mouse,constraint:{render:{visible:false}}}),
-			runner=Matter.Runner.create();
-
-		render.mouse=mouse;
-		Spriter.stdMod=(ctx,img)=>{ctx.beginPath();ctx.ellipse(img.width/2,img.height/2,img.width/2,img.height/2,0,0, 2*Math.PI);ctx.clip();ctx.drawImage(img,0,0);};
-		Matter.Body.setVelocity(stack.bodies[0],Matter.Vector.create(-100,-100));
-		Matter.Composite.add(engine.world,[stack,mc]);
-		Matter.Render.run(render);
-		Matter.Runner.run(runner,engine);
+			render.mouse=mouse;
+			Spriter.stdMod=(ctx,img)=>{ctx.beginPath();ctx.ellipse(img.width/2,img.height/2,img.width/2,img.height/2,0,0, 2*Math.PI);ctx.clip();ctx.drawImage(img,0,0);};
+			Matter.Body.setVelocity(stack.bodies[0],Matter.Vector.create(-100,-100));
+			Matter.Composite.add(engine.world,[stack,mc]);
+			Matter.Render.run(render);
+			Matter.Runner.run(runner,engine);
+		});
 	</script>
 </body>
 </html>

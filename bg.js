@@ -20,7 +20,8 @@ Promise.all([
 				wireframes:false,background:'#0000'
 			}
 		}),
-		stack=Matter.Composites.stack(render.options.width/2-235,render.options.height/2-355,8,8,10,10,(x,y)=>{
+		num=Math.round(Math.sqrt(render.options.width*render.options.height/7000)),
+		stack=Matter.Composites.stack((render.options.width-60*num-10)/2,(render.options.height-90*num-10)/2,num,num,10,10,(x,y)=>{
 			const s=Matter.Common.random(10,40);
 			return Matter.Bodies.circle(x,y,s,{
 				frictionAir:.001,restitution:.5,
@@ -31,7 +32,7 @@ Promise.all([
 		//mouse=Matter.Mouse.create(render.canvas),
 		//mc=Matter.MouseConstraint.create(engine,{mouse,constraint:{render:{visible:false}}}),
 		runner=Matter.Runner.create(),
-		vrand=(_,r=Math.random(),t=r*20*Math.PI)=>Matter.Body.setVelocity(stack.bodies[Math.floor(stack.bodies.length*r)],Matter.Vector.create(Math.cos(t)*10,Math.sin(t)*10));
+		vrand=(_,r=Math.random(),t=r*20*Math.PI,body=stack.bodies[Math.floor(stack.bodies.length*r)])=>Matter.Body.applyForce(body,body.position,{x:Math.cos(t)*.05,y:Math.sin(t)*.05});
 
 	//render.mouse=mouse;
 	Spriter.stdMod=(ctx,img)=>{ctx.beginPath();ctx.ellipse(img.width/2,img.height/2,img.width/2,img.height/2,0,0, 2*Math.PI);ctx.clip();ctx.drawImage(img,0,0);};
@@ -42,5 +43,5 @@ Promise.all([
 	Matter.Render.run(render);
 	Matter.Runner.run(runner,engine);
 	c.style.opacity='';
-	vrand();setInterval(vrand,2000);
+	vrand();setInterval(vrand,128000/(num*num));
 })

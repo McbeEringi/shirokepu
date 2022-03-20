@@ -80,7 +80,7 @@
 			}))).then(y=>{
 				if(window.graphs)graphs.remove();
 				const e=document.createElement('div');e.id='graphs';
-				e.insertAdjacentHTML('beforeend','<h3>グラフ一覧</h3><hr>')
+				e.insertAdjacentHTML('beforeend','<h3>グラフ</h3><hr>')
 				y.forEach(z=>e.appendChild(z));
 				wrap.appendChild(e);
 			});

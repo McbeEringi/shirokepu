@@ -29,7 +29,8 @@
 	</div>
 	<script src="com.js"></script>
 	<script>
-		fetch('main.json').then(x=>x.json()).then(x=>{
+		fetch('db.js').then(x=>x.text()).then(x=>{
+			x=Function('return'+x)();
 			x.data=x.data.map(y=>[y,Math.floor(y.date*.01)]);
 			x.month=[...new Set(x.data.map(y=>y[1]))];
 			x.tmp=Object.fromEntries(x.month.map((y,i)=>[y,i]));

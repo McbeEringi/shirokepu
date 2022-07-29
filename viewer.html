@@ -29,7 +29,8 @@
 	<script src="com.js"></script>
 	<script>
 		subt.textContent=(urlq.subt||[]).map(decodeURIComponent).join('+');
-		fetch('main.json').then(x=>x.json()).then(x=>{
+		fetch('db.js').then(x=>x.text()).then(x=>{
+			x=Function('return'+x)();
 			x.data=Object.fromEntries(x.data.map(y=>[y.no,y]));
 			x.tmp=urlq.i||[...Object.keys(x.data)].reverse();
 			wrap.textContent='';

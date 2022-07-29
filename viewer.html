@@ -13,8 +13,8 @@
 		.cover{display:none;position:relative;height:100vh;text-align:center;break-inside:avoid;}
 		.cover>*{position:absolute;width:100%;transform:translateY(-50%);}
 		@media print{.cover{display:block;}}
-		img{width:3.5em;height:3.5em;border-radius:50%;vertical-align:middle;}
-		table{display:inline-block;vertical-align:middle;}
+		.ico{width:3.5em;height:3.5em;border-radius:50%;vertical-align:middle;}
+		.table{display:inline-block;vertical-align:middle;}
 		.vflex{display:flex;flex-direction:column;}.vflex>a{flex-grow:1;display:flex;align-items:center;}.vflex>hr{width:100%;}
 	</style>
 	<div class="cover">
@@ -44,7 +44,7 @@
 								<a href="?m=1&i=${y.no}"><h2>${y.data}</h2></a>
 								<hr>
 								<div>
-									<img src="img/m${y.member}.png" alt="${x.member[y.member].name}">
+									<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="ico">
 									${table(['番号:',y.no],['日付:',n2d(y.date).join('/')],['タグ:',...y.tag.map(z=>x.tag[z])])}
 								</div>
 							</div>`;
@@ -58,7 +58,7 @@
 						return`<div>
 								${table(['<h1>'+y.no+'. </h1>','<h1>'+y.data+'</h1>'],['',y.desc||'??'])}
 								<hr>
-								<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="pic">
+								<img src="img/m${y.member}.png" alt="${x.member[y.member].name}" class="ico">
 								${table(['名前:',x.member[y.member].name],['属性:',...x.member[y.member].aka])}<br>
 								${table(['日付:',n2d(y.date).join('/')],['タグ:',...y.tag.map(z=>x.tag[z])])}
 							</div>`;

@@ -7,6 +7,8 @@
 	],
 	tag:["誤字", "おつうわ", "チャット", "ツイート"],
 	data:[
+		{no:212, member:1, date:260726, tag:[1], data:"ずぃんせい", desc:"人生"},
+		{no:211, member:1, date:260726, tag:[1], data:"かじちゅ酒", desc:"果実酒って言いにくいっすよね"},
 		{no:210, member:3, date:220608, tag:[3], data:"びっきゅり", desc:"bigきゅり<br>❗の上側"},
 		{no:209, member:3, date:220313, tag:[0], data:"お通話糖分入れそうにないです💦", desc:`砂糖を混ぜておきたい<img src="img/photos/Screenshot_20210913-235626.png" width="200">`},
 		{no:208, member:1, date:220313, tag:[1], data:"全米が鳴いた\\ニャーン/", desc:"えりんぎ「ｺｳﾁｬｻﾝｽｲﾀｲ」"},

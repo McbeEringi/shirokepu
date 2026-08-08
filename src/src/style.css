@@ -1,0 +1,20 @@
+:root{
+	--wk:#210;--ww:#eed;
+	--ck:#223;--cw:#def;
+	--s:#999c;
+	--bc:var(--ww);--fc:var(--wk);
+	--sbc:var(--cw);--sfc:var(--ck);
+
+	color-scheme:light dark;
+	color:var(--fc);background-color:var(-bc);
+	font-family:sans-serif;
+	tab-size:2;overflow-wrap:break-word;
+}
+@media(prefers-color-scheme:dark){
+	:root{
+	--bc:var(--sk);--fc:var(--cw);
+	--sbc:var(--wk);--sfc:var(--ww);
+	}
+}
+
+main{max-width:max(50%,960px);margin:0 auto;}

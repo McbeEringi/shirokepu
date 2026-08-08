@@ -10,13 +10,17 @@ const
 tmpl=await Bun.file('tmpl.html').text(),
 m2icon={うた:'uta',しろる:'shiroru',えりんぎ:'eringi',紅茶:'tea'},
 entries=await Promise.all(
-	new Bun.Glob('**/*.md').scanSync({cwd:'dst/entries',absolute:true})[Symbol.iterator]().map(async w=>(
+	new Bun.Glob('**/*.md').scanSync({cwd:'dst/entries'})[Symbol.iterator]().map(async w=>(
 		w={
-			path:w,
-			...(
-				await Bun.file(w).text()
-			).match(/^(?<shebang>#![^\n]*)?(?:\r?\n)*(?:---\r?\n(?<front_matter>.*?)\r?\n---)?(?:\r?\n)+(?<markdown>.*)$/s)?.groups??{}
+			name:w,
+			path:'dst/entries/'+w
 		},
+		Object.assign(
+			w,
+			(
+				await Bun.file(w.path).text()
+			).match(/^(?<shebang>#![^\n]*)?(?:\r?\n)*(?:---\r?\n(?<front_matter>.*?)\r?\n---)?(?:\r?\n)+(?<markdown>.*)$/s)?.groups??{}
+		),
 		// console.log(w.path),
 		w.front_matter&&=Bun.YAML.parse(w.front_matter.replace(/\t/g,'  ')),
 		w.entry=w.markdown.match(/^ {0,3}#[ \t]+(?<x>.+)$| {0,3}(?<x>.+)\r?\n {0,3}=+[ \t]*$/m)?.groups.x,
@@ -51,7 +55,7 @@ Bun.write(
 	new HTMLRewriter()
 		.on('main',{element:e=>e.append(
 			`<h1>もくじ(仮)</h1><ul>${
-				entries.sort((a,b)=>b.front_matter.id-a.front_matter.id).map(x=>`<li><a href="${x.front_matter.id}">${x.front_matter.id}: ${x.entry}</a></li>`).join('')
+				entries.sort((a,b)=>b.front_matter.id-a.front_matter.id).map(x=>`<li><a href="${x.name.replace(/\.md$/,'.html')}">${x.front_matter.id}: ${x.entry}</a></li>`).join('')
 			}</ul>`,
 			{html:1}
 		)})

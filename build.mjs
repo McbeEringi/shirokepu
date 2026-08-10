@@ -28,7 +28,9 @@ entries=await Promise.all(
 
 		w.html=new HTMLRewriter()
 			.on('main',{element:async e=>e.append(
-				`<pre>${JSON.stringify(w.front_matter,0,'\t')}</pre>${Bun.markdown.html(w.markdown)}`,
+				`<pre>${JSON.stringify(w.front_matter,0,'\t')}</pre>${await MarkdownItAsync({
+					breaks:true
+				}).renderAsync(w.markdown)}`,
 				{html:1}
 			)})
 			.on('title',{element:e=>e.append(w.title)})

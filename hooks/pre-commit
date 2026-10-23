@@ -1,11 +1,14 @@
 #!/usr/bin/bash
 
-if git diff --cached --name-only --diff-filter=ACMRT |
-  grep -iE '^src/entries/.*\.(png|jpe?g|tiff?|gif|webp|heic|heif)$'
-then
+files=$(git diff --cached --name-only --diff-filter=ACMRT |
+  grep -iE '^src/entries/.*\.(png|jpe?g|tiff?|gif|webp|heic|heif)$' || true)
+
+if [ -n "$files" ]; then
   echo -e "\e[31mERROR\e[0m: ありがちな画像フォーマットを検出しました" >&2
+  echo "$files" | while IFS= read -r file; do
+    git restore --staged -- "$file"
+    echo "Unstaged: $file"
+  done
   echo "avifenc --progressive などで AVIF に変換してください" >&2
   exit 1
 fi
-
-exit 0

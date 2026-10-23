@@ -1,10 +1,10 @@
 #!/usr/bin/bash
 
-git diff --cached --name-only | grep -ioP '^src/entries/.*\.(png|jpg|jpeg|tiff|gif|webp|heic|heif)'
-
-if [ $? -eq 0 ]; then
-  echo -e "\e[31mERROR\e[0m: ありがちな画像フォーマットを検出しました"
-  echo "avifenc --progressive とかでavifにしてください"
+if git diff --cached --name-only --diff-filter=ACMRT |
+  grep -iE '^src/entries/.*\.(png|jpe?g|tiff?|gif|webp|heic|heif)$'
+then
+  echo -e "\e[31mERROR\e[0m: ありがちな画像フォーマットを検出しました" >&2
+  echo "avifenc --progressive などで AVIF に変換してください" >&2
   exit 1
 fi
 

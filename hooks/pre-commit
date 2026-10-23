@@ -1,4 +1,11 @@
 #!/usr/bin/bash
-exec 1>&2
-echo hello
 
+git diff --cached --name-only | grep -ioP '^src/entries/.*\.(png|jpg|jpeg|tiff|gif|webp|heic|heif)'
+
+if [ $? -eq 0 ]; then
+  echo "ERROR: ありがちな画像フォーマットを検出しました"
+  echo "avifenc --progressive とかでavifにしてください"
+  exit 1
+fi
+
+exit 0
